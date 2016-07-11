@@ -1,0 +1,26 @@
+
+load ./f_random.so
+
+param a=agauss(1,1,6)
+eval a
+eval a
+eval a
+eval a
+
+param a=agauss(1,1,1)
+eval a
+eval a
+eval a
+eval a
+
+param b=agauss(1,1)
+eval b
+eval b
+eval b
+
+param c=gauss(1,1)
+eval c
+eval c
+eval c
+
+end

@@ -1,0 +1,25 @@
+CONTENTS:
+
+random variable sampling for gnucap. implemented as "functions".
+see ngspice manual for semantics.
+
+USAGE:
+
+attach f_random.so using -a or the load/attach command. then "random functions"
+are available.
+
+BUILD:
+
+uses gnucap-conf. might not yet work with vanilla gnucap.
+
+should build for gnucap-uf with
+$ make SUFFIX=-uf
+
+TODO:
+
+- random-seed management not implemented
+- more distributions
+
+BUGS:
+
+for sure. please report.
