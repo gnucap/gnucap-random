@@ -1,25 +1,42 @@
-CONTENTS:
+CONTENTS
 
-random variable sampling for gnucap. implemented as "functions".
-see ngspice manual for semantics.
+gsl based random variable sampling for gnucap. implemented as "functions". see
+ngspice manual for function and argument names.
 
-USAGE:
+USAGE
 
 attach f_random.so using -a or the load/attach command. then "random functions"
 are available.
 
-BUILD:
+BUILD
 
-uses gnucap-conf. might not yet work with vanilla gnucap.
+type
 
-should build for gnucap-uf with
+$ make
+$ make install
+
+this is not tested without gnucap-conf (how?).
+
+to build for other flavors, e.g. gnucap-uf, type
+
 $ make SUFFIX=-uf
 
-TODO:
+TODO
 
 - random-seed management not implemented
-- more distributions
+- complete a few corner cases
+- testing
 
-BUGS:
+LIMITATIONS
+
+this is not fully compatible to ngspice (according to the manual), which is due
+to ngspice expression handling.
+
+command                gnucap (in spice mode)      ngspice
+.param x=gauss(1,1)    declare random variable     pick random sample
+.eval x                pick random sample          ?
+.measure xs=eval(x)    assign random sample        ?
+
+BUGS
 
 for sure. please report.
