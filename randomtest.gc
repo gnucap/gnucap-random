@@ -28,4 +28,16 @@ eval d
 eval d
 eval d
 
+param u=unif(1,1)
+eval u
+eval u
+eval u
+
+param u=aunif(0,1)
+eval u
+eval u
+eval u
+eval u
+eval u
+
 end

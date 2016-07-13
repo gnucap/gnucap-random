@@ -122,4 +122,71 @@ private:
 } p_rgauss;
 DISPATCHER<FUNCTION>::INSTALL d_rgauss(&function_dispatcher, "gauss|rgauss", &p_rgauss);
 
+class runif : public FUNCTION { //
+public:
+	fun_t eval(CS& Cmd, const CARD_LIST* Scope)const
+	{
+		{
+			const gsl_rng_type * T;
+			T = gsl_rng_default;
+
+			if (!_rng){
+				gsl_rng_env_setup();
+				_rng = gsl_rng_alloc(T);
+			}
+		}
+		PARAMETER<double> mean;
+		PARAMETER<double> rel_dev; // relative std deviation. NOT variance
+		Cmd >> mean >> rel_dev;
+
+		mean.e_val(NOT_INPUT, Scope);
+		rel_dev.e_val(NOT_INPUT, Scope);
+		double abs_dev = 0;
+
+		if(!mean.has_hard_value()){
+			incomplete();
+		}else{ untested();
+			abs_dev = rel_dev*mean;
+		}
+
+		double rnd=gsl_rng_uniform_pos (_rng);
+		rnd *= 2;
+		rnd -= 1;
+
+		return to_fun_t( rnd*abs_dev + mean);
+	}
+private:
+} p_runif;
+DISPATCHER<FUNCTION>::INSTALL d_runif(&function_dispatcher, "unif|runif", &p_runif);
+
+class aunif : public FUNCTION { //
+public:
+	fun_t eval(CS& Cmd, const CARD_LIST* Scope)const
+	{
+		{
+			const gsl_rng_type * T;
+			T = gsl_rng_default;
+
+			if (!_rng){
+				gsl_rng_env_setup();
+				_rng = gsl_rng_alloc(T);
+			}
+		}
+		PARAMETER<double> mean;
+		PARAMETER<double> abs_dev; // relative std deviation. NOT variance
+		Cmd >> mean >> abs_dev;
+
+		mean.e_val(NOT_INPUT, Scope);
+		abs_dev.e_val(NOT_INPUT, Scope);
+
+		double rnd=gsl_rng_uniform_pos (_rng);
+		rnd *= 2;
+		rnd -= 1;
+
+		return to_fun_t( rnd*abs_dev + mean);
+	}
+private:
+} p_aunif;
+DISPATCHER<FUNCTION>::INSTALL d_aunif(&function_dispatcher, "aunif", &p_aunif);
+
 }
