@@ -20,9 +20,17 @@
  * 02110-1301, USA.
  */
 
-#include "u_parameter.h"
-#include "u_function.h"
-# include <gsl/gsl_randist.h>
+#include <u_parameter.h>
+#include <u_function.h>
+#include <globals.h>
+#include <gsl/gsl_randist.h>
+
+// -u compat hack
+#ifndef _U_FUNC
+typedef std::string fun_t;
+#define to_fun_t to_string
+#endif
+
 
 namespace{
 
@@ -61,7 +69,7 @@ public:
 			abs_dev = abs_dev/sigma;
 		}
 
-		return gsl_ran_gaussian(_rng, abs_dev) + mean;
+		return to_fun_t(gsl_ran_gaussian(_rng, abs_dev) + mean);
 	}
 private:
 } p_gauss;
@@ -108,7 +116,7 @@ public:
 			abs_dev = abs_dev/sigma;
 		}
 
-		return gsl_ran_gaussian(_rng, abs_dev) + mean;
+		return to_fun_t(gsl_ran_gaussian(_rng, abs_dev) + mean);
 	}
 private:
 } p_rgauss;

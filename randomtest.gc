@@ -23,4 +23,9 @@ eval c
 eval c
 eval c
 
+measure d=eval(c)
+eval d
+eval d
+eval d
+
 end
