@@ -20,6 +20,8 @@
  * 02110-1301, USA.
  */
 
+// implements (a)gauss, (a)unif and limit as per ngspice manual.
+
 #include <u_parameter.h>
 #include <u_function.h>
 #include <globals.h>
@@ -188,5 +190,35 @@ public:
 private:
 } p_aunif;
 DISPATCHER<FUNCTION>::INSTALL d_aunif(&function_dispatcher, "aunif", &p_aunif);
+
+class limit : public FUNCTION { //
+public:
+	fun_t eval(CS& Cmd, const CARD_LIST* Scope)const
+	{
+		{
+			const gsl_rng_type * T;
+			T = gsl_rng_default;
+
+			if (!_rng){
+				gsl_rng_env_setup();
+				_rng = gsl_rng_alloc(T);
+			}
+		}
+		PARAMETER<double> mean;
+		PARAMETER<double> abs_dev; // relative std deviation. NOT variance
+		Cmd >> mean >> abs_dev;
+
+		mean.e_val(NOT_INPUT, Scope);
+		abs_dev.e_val(NOT_INPUT, Scope);
+
+		if(gsl_rng_uniform_int(_rng, 2)){
+			abs_dev =- abs_dev;
+		}
+
+		return to_fun_t( abs_dev + mean);
+	}
+private:
+} p_limit;
+DISPATCHER<FUNCTION>::INSTALL d_limit(&function_dispatcher, "limit", &p_limit);
 
 }

@@ -40,4 +40,13 @@ eval u
 eval u
 eval u
 
+* should produce 4 and 6
+param l=limit(5,1)
+eval l
+eval l
+eval l
+eval l
+eval l
+eval l
+
 end
