@@ -7,6 +7,9 @@ ifneq ($(GNUCAP_CONF),)
     GNUCAP_CPPFLAGS = $(shell $(GNUCAP_CONF) --cppflags) -DADD_VERSION -DPIC
     GNUCAP_CXXFLAGS = $(shell $(GNUCAP_CONF) --cxxflags)
 	 GNUCAP_LIBDIR   = $(shell $(GNUCAP_CONF) --libdir)
+# TODO complete gnucap-conf
+	 GNUCAP_PKGLIBDIR = $(GNUCAP_LIBDIR)/gnucap
+	 GNUCAP_DOCDIR = $(GNUCAP_PREFIX)/share/doc
 else
     $(info no gnucap-conf, this will not work.)
     $(info please install gnucap...)
@@ -23,11 +26,17 @@ LIBS=-lgsl -lgslcblas -lm
 f_random.so : f_random.cc
 	$(CXX) $(CXXFLAGS) $(GNUCAP_CXXFLAGS) $(CPPFLAGS) $(GNUCAP_CPPFLAGS) -o $@ f_random.cc $(LIBS)
 
-GNUCAP_PKGLIBDIR = $(GNUCAP_LIBDIR)/gnucap
+EXAMPLES = randomtest.gc
 
-install : $(MODULES)
+install : $(MODULES) $(EXAMPLES) README
 	install -d $(DESTDIR)$(GNUCAP_PKGLIBDIR)
 	install $(MODULES) $(DESTDIR)$(GNUCAP_PKGLIBDIR)
+
+	install -d $(DESTDIR)$(GNUCAP_DOCDIR)/$(PACKAGE_NAME)
+	install README $(DESTDIR)$(GNUCAP_DOCDIR)/$(PACKAGE_NAME)
+
+	install -d $(DESTDIR)$(GNUCAP_DOCDIR)/$(PACKAGE_NAME)/examples
+	install $(EXAMPLES) $(DESTDIR)$(GNUCAP_DOCDIR)/$(PACKAGE_NAME)/examples
 
 uninstall :
 	(cd $(DESTDIR)$(GNUCAP_PKGLIBDIR) ; rm $(MODULES))
