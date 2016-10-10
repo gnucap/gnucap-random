@@ -8,21 +8,8 @@ ifneq ($(GNUCAP_CONF),)
     GNUCAP_CXXFLAGS = $(shell $(GNUCAP_CONF) --cxxflags)
 	 GNUCAP_LIBDIR   = $(shell $(GNUCAP_CONF) --libdir)
 else
-    $(info no gnucap-conf, this might not work)
-    CXX = g++
-    GNUCAP_CXXFLAGS = \
-        -g -O0 \
-        -Wall -Wextra \
-        -Wswitch-enum -Wundef -Wpointer-arith -Woverloaded-virtual \
-        -Wcast-qual -Wcast-align -Wpacked -Wshadow -Wconversion \
-        -Winit-self -Wmissing-include-dirs -Winvalid-pch \
-        -Wvolatile-register-var -Wstack-protector \
-        -Wlogical-op -Wvla -Woverlength-strings -Wsign-conversion
-    GNUCAP_CPPFLAGS = \
-        -DHAVE_LIBREADLINE \
-        -DUNIX \
-        -DTRACE_UNTESTED
-	 GNUCAP_LIBDIR=/usr/share/gnucap
+    $(info no gnucap-conf, this will not work.)
+    $(info please install gnucap...)
 endif
 
 GNUCAP_CXXFLAGS+= -fPIC -shared
