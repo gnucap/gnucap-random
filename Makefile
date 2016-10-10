@@ -36,12 +36,14 @@ LIBS=-lgsl -lgslcblas -lm
 f_random.so : f_random.cc
 	$(CXX) $(CXXFLAGS) $(GNUCAP_CXXFLAGS) $(CPPFLAGS) $(GNUCAP_CPPFLAGS) -o $@ f_random.cc $(LIBS)
 
+GNUCAP_PKGLIBDIR = $(GNUCAP_LIBDIR)/gnucap
+
 install : $(MODULES)
-	install -d $(DESTDIR)$(GNUCAP_LIBDIR)
-	install $(MODULES) $(DESTDIR)$(GNUCAP_LIBDIR)
+	install -d $(DESTDIR)$(GNUCAP_PKGLIBDIR)
+	install $(MODULES) $(DESTDIR)$(GNUCAP_PKGLIBDIR)
 
 uninstall :
-	(cd $(DESTDIR)$(GNUCAP_LIBDIR) ; rm $(MODULES))
+	(cd $(DESTDIR)$(GNUCAP_PKGLIBDIR) ; rm $(MODULES))
 
 clean :
 	rm -f $(CLEANFILES)
