@@ -46,6 +46,10 @@ uninstall :
 clean :
 	rm -f $(CLEANFILES)
 
+# not yet. please consider in packaging
+check:
+	@:
+
 distclean: clean
 	rm Make.override
 
