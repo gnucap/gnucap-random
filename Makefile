@@ -28,7 +28,7 @@ endif
 GNUCAP_CXXFLAGS+= -fPIC -shared
 
 CLEANFILES = f_random.so
-INSTALL_FILES = f_random.so
+MODULES = f_random.so
 
 all: f_random.so
 
@@ -36,12 +36,12 @@ LIBS=-lgsl -lgslcblas -lm
 f_random.so : f_random.cc
 	$(CXX) $(CXXFLAGS) $(GNUCAP_CXXFLAGS) $(CPPFLAGS) $(GNUCAP_CPPFLAGS) -o $@ f_random.cc $(LIBS)
 
-install : $(INSTALL_FILES)
-	install -d $(GNUCAP_LIBDIR)
-	install $(INSTALL_FILES) $(GNUCAP_LIBDIR)
+install : $(MODULES)
+	install -d $(DESTDIR)$(GNUCAP_LIBDIR)
+	install $(MODULES) $(DESTDIR)$(GNUCAP_LIBDIR)
 
 uninstall :
-	(cd $(GNUCAP_LIBDIR) ; rm $(INSTALL_FILES))
+	(cd $(DESTDIR)$(GNUCAP_LIBDIR) ; rm $(MODULES))
 
 clean :
 	rm -f $(CLEANFILES)

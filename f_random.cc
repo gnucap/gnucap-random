@@ -27,7 +27,7 @@
 #include <globals.h>
 #include <gsl/gsl_randist.h>
 
-// -u compat hack
+// -uf compat hack
 #ifndef _U_FUNC
 typedef std::string fun_t;
 #define to_fun_t to_string
