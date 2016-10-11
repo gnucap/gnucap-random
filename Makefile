@@ -1,4 +1,5 @@
 GNUCAP_CONF = $(shell which gnucap-conf$(SUFFIX))
+PACKAGE_NAME = gnucap-random
 
 include Make.override
 
@@ -8,6 +9,7 @@ ifneq ($(GNUCAP_CONF),)
     GNUCAP_CXXFLAGS = $(shell $(GNUCAP_CONF) --cxxflags)
 	 GNUCAP_LIBDIR   = $(shell $(GNUCAP_CONF) --libdir)
 # TODO complete gnucap-conf
+	 GNUCAP_PREFIX   = $(shell $(GNUCAP_CONF) --exec-prefix)# BUG, should be prefix!
 	 GNUCAP_PKGLIBDIR = $(GNUCAP_LIBDIR)/gnucap
 	 GNUCAP_DOCDIR = $(GNUCAP_PREFIX)/share/doc
 else
