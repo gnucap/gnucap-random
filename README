@@ -10,12 +10,11 @@ are available.
 
 BUILD
 
-type
+this requires "gnucap-conf". available in gnucap unstable.  type
 
 $ make
 $ make install
 
-this is not tested without gnucap-conf (how?).
 
 to build for other flavors, e.g. gnucap-uf, type
 
@@ -30,7 +29,7 @@ TODO
 LIMITATIONS
 
 this is not fully compatible to ngspice (according to the manual), which is due
-to ngspice expression handling.
+to limitations in ngspice expression handling.
 
 command                gnucap (in spice mode)      ngspice
 .param x=gauss(1,1)    declare random variable     pick random sample
