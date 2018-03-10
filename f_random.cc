@@ -21,7 +21,7 @@
  */
 
 // implements (a)gauss, (a)unif and limit as per ngspice manual.
-
+/*--------------------------------------------------------------------------*/
 #include <u_parameter.h>
 #include <u_function.h>
 #include <globals.h>
@@ -32,25 +32,24 @@
 typedef std::string fun_t;
 #define to_fun_t to_string
 #endif
-
-
+/*--------------------------------------------------------------------------*/
 namespace{
+/*--------------------------------------------------------------------------*/
+struct myrng{
+  myrng(){
+    const gsl_rng_type * T;
+    T = gsl_rng_default;
 
-static gsl_rng *_rng;
-
-class agauss : public FUNCTION { //
+    gsl_rng_env_setup();
+    _rng = gsl_rng_alloc(T);
+  }
+  gsl_rng *_rng;
+} rng;
+/*--------------------------------------------------------------------------*/
+class agauss : public FUNCTION {
 public:
 	fun_t eval(CS& Cmd, const CARD_LIST* Scope)const
 	{
-		{
-			const gsl_rng_type * T;
-			T = gsl_rng_default;
-
-			if (!_rng){
-				gsl_rng_env_setup();
-				_rng = gsl_rng_alloc(T);
-			}
-		}
 		PARAMETER<double> mean;
 		PARAMETER<double> abs_dev_in; // standard deviation. NOT variance
 		PARAMETER<double> sigma; // some weird scaling. NOT standard deviation
@@ -71,25 +70,16 @@ public:
 			abs_dev = abs_dev/sigma;
 		}
 
-		return to_fun_t(gsl_ran_gaussian(_rng, abs_dev) + mean);
+		return to_fun_t(gsl_ran_gaussian(rng._rng, abs_dev) + mean);
 	}
 private:
 } p_gauss;
 DISPATCHER<FUNCTION>::INSTALL d_gauss(&function_dispatcher, "agauss", &p_gauss);
-
-class rgauss : public FUNCTION { //
+/*--------------------------------------------------------------------------*/
+class rgauss : public FUNCTION {
 public:
 	fun_t eval(CS& Cmd, const CARD_LIST* Scope)const
 	{
-		{
-			const gsl_rng_type * T;
-			T = gsl_rng_default;
-
-			if (!_rng){
-				gsl_rng_env_setup();
-				_rng = gsl_rng_alloc(T);
-			}
-		}
 		PARAMETER<double> mean;
 		PARAMETER<double> rel_dev; // relative std deviation. NOT variance
 		PARAMETER<double> sigma; // some weird scaling. NOT standard deviation
@@ -118,25 +108,16 @@ public:
 			abs_dev = abs_dev/sigma;
 		}
 
-		return to_fun_t(gsl_ran_gaussian(_rng, abs_dev) + mean);
+		return to_fun_t(gsl_ran_gaussian(rng._rng, abs_dev) + mean);
 	}
 private:
 } p_rgauss;
 DISPATCHER<FUNCTION>::INSTALL d_rgauss(&function_dispatcher, "gauss|rgauss", &p_rgauss);
-
-class runif : public FUNCTION { //
+/*--------------------------------------------------------------------------*/
+class runif : public FUNCTION {
 public:
 	fun_t eval(CS& Cmd, const CARD_LIST* Scope)const
 	{
-		{
-			const gsl_rng_type * T;
-			T = gsl_rng_default;
-
-			if (!_rng){
-				gsl_rng_env_setup();
-				_rng = gsl_rng_alloc(T);
-			}
-		}
 		PARAMETER<double> mean;
 		PARAMETER<double> rel_dev; // relative std deviation. NOT variance
 		Cmd >> mean >> rel_dev;
@@ -151,7 +132,7 @@ public:
 			abs_dev = rel_dev*mean;
 		}
 
-		double rnd=gsl_rng_uniform_pos (_rng);
+		double rnd=gsl_rng_uniform_pos (rng._rng);
 		rnd *= 2;
 		rnd -= 1;
 
@@ -160,20 +141,11 @@ public:
 private:
 } p_runif;
 DISPATCHER<FUNCTION>::INSTALL d_runif(&function_dispatcher, "unif|runif", &p_runif);
-
-class aunif : public FUNCTION { //
+/*--------------------------------------------------------------------------*/
+class aunif : public FUNCTION {
 public:
 	fun_t eval(CS& Cmd, const CARD_LIST* Scope)const
 	{
-		{
-			const gsl_rng_type * T;
-			T = gsl_rng_default;
-
-			if (!_rng){
-				gsl_rng_env_setup();
-				_rng = gsl_rng_alloc(T);
-			}
-		}
 		PARAMETER<double> mean;
 		PARAMETER<double> abs_dev; // relative std deviation. NOT variance
 		Cmd >> mean >> abs_dev;
@@ -181,7 +153,7 @@ public:
 		mean.e_val(NOT_INPUT, Scope);
 		abs_dev.e_val(NOT_INPUT, Scope);
 
-		double rnd=gsl_rng_uniform_pos (_rng);
+		double rnd=gsl_rng_uniform_pos (rng._rng);
 		rnd *= 2;
 		rnd -= 1;
 
@@ -190,20 +162,11 @@ public:
 private:
 } p_aunif;
 DISPATCHER<FUNCTION>::INSTALL d_aunif(&function_dispatcher, "aunif", &p_aunif);
-
-class limit : public FUNCTION { //
+/*--------------------------------------------------------------------------*/
+class limit : public FUNCTION {
 public:
 	fun_t eval(CS& Cmd, const CARD_LIST* Scope)const
 	{
-		{
-			const gsl_rng_type * T;
-			T = gsl_rng_default;
-
-			if (!_rng){
-				gsl_rng_env_setup();
-				_rng = gsl_rng_alloc(T);
-			}
-		}
 		PARAMETER<double> mean;
 		PARAMETER<double> abs_dev; // relative std deviation. NOT variance
 		Cmd >> mean >> abs_dev;
@@ -211,7 +174,7 @@ public:
 		mean.e_val(NOT_INPUT, Scope);
 		abs_dev.e_val(NOT_INPUT, Scope);
 
-		if(gsl_rng_uniform_int(_rng, 2)){
+		if(gsl_rng_uniform_int(rng._rng, 2)){
 			abs_dev =- abs_dev;
 		}
 
@@ -220,5 +183,7 @@ public:
 private:
 } p_limit;
 DISPATCHER<FUNCTION>::INSTALL d_limit(&function_dispatcher, "limit", &p_limit);
-
+/*--------------------------------------------------------------------------*/
 }
+/*--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
