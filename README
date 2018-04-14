@@ -10,11 +10,10 @@ are available.
 
 BUILD
 
-this requires "gnucap-conf". available in gnucap unstable.  type
+this requires "gnucap".
 
 $ make
 $ make install
-
 
 to build for other flavors, e.g. gnucap-uf, type
 

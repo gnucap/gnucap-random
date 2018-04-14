@@ -7,10 +7,9 @@ ifneq ($(GNUCAP_CONF),)
     CXX = $(shell $(GNUCAP_CONF) --cxx)
     GNUCAP_CPPFLAGS = $(shell $(GNUCAP_CONF) --cppflags) -DADD_VERSION -DPIC
     GNUCAP_CXXFLAGS = $(shell $(GNUCAP_CONF) --cxxflags)
-	 GNUCAP_LIBDIR   = $(shell $(GNUCAP_CONF) --libdir)
+	 GNUCAP_PKGLIBDIR   = $(shell $(GNUCAP_CONF) --pkglibdir)
 # TODO complete gnucap-conf
 	 GNUCAP_PREFIX   = $(shell $(GNUCAP_CONF) --exec-prefix)# BUG, should be prefix!
-	 GNUCAP_PKGLIBDIR = $(GNUCAP_LIBDIR)/gnucap$(SUFFIX)
 	 GNUCAP_DOCDIR = $(GNUCAP_PREFIX)/share/doc
 else
     $(info no gnucap-conf, this will not work.)
